@@ -1,0 +1,494 @@
+Set a github for the project
+
+Choose an editor
+    Strong ES2015+support
+        -Autocompletion
+        -Parse ES6 imports
+        -Report unused imports
+        -Automated refactoring (like rename and extract function)
+    Framework intelligence 
+        Built in support like Node, react.. webStorm and vsCode both offers Node debuging 
+    Built-in terminal
+        All the used tools are dependng on command line.
+        Gives you a single window about anything you want to know about the current status of the app.
+        Its handy having one spot to check for the lintiners, build status and more..
+    Git integration
+
+Editor config
+
+Install Node
+
+Select package manager: npm
+    Bower became popular by supporting the entire web platforms and packaging a libraries in a format
+    didnt require a build step (Transpiling,minifying, linting,..).
+    npm is matured by fixing fiction points for frontend developer, notice grow in all the popularity 
+    and Bundlers has continue to become more powerful.
+    JSPM allow you to install packages from own list repository as well as from other locations.
+
+Add package.json to the project and install the packages
+    
+Package security :
+    Because packages can be published by anyone.
+    retire.js/Node security platform are two ways
+    to check the project dependencies for knwon vulnerability.
+    Node security platform: offers a simple command line interface you can automat checking for 
+    security vulnerability automatically  (nsp check)
+    npm install --global nsp
+    //cd to the app
+    nsp check
+    options:
+        Manually -Easy to forget
+        npm install -the used packages may have issues later
+        producation build - 
+        or github automatically of pull request  - both a bit too late and then we already used the package so
+         alot of potintially rework a head if we need to select an alternative package.
+        npm start -Slows start slightly.
+
+Development Webserver:
+// These webservers are not for Production, hosting the app on the local machine (exception of Express)
+    http-server: a lightweight webserver that service the current directory as a web root,
+    requires no configuration, static files.
+    live-server: is also a lightweight, loading capability everytime we hit save 
+    the changes are immidiatlly visible, nice improvment of http-server.
+    Express: 
+        comprehensive (full featured)
+        Extremely popular
+        Highly configurable 
+        Complex api's via node 
+        Production 
+        Advantage of running the same webserver in all places
+        Competitors: Koa, hapi
+    Intersting options specific to the Bundlers we choose
+    Budo: 
+        Intergrate with Browserify
+        Includes hot reloading (see the changes reflect in the browser when hit save)
+    Webpack Dev Server:
+        comprehensive Bundlers
+        avoid pulling in from the mother dependency
+        serves from memory
+        hot reloading
+    BrowserSync:
+        Free webserver that is two really compiling features
+        Dedicated IP for sharing work on LAN(anyone hit the IP can see the app)
+        Same IP on multiple devices, all the interaction devices will remain on sync
+        Great for cross-device testing
+        Intergrate with Webpack, Browserify, Gulp.
+
+Set up Express
+    config Express : keep all Bundlers and tools in one folder
+    new folder -> "buildScripts" -> new file -> "srcServer.js"
+    Set up configuration
+    new folder -> "src" -> new file -> "index.html"
+
+Sharing work-in-progress
+    BrowserSync is a handy to show the work with co-workers
+    and doesn't expose the public IP for testing.
+    If we want quickly show work in public web
+    Hilariously easier than configure a traditional cloud providers like AWS, Azure
+    Localtunnel:
+        offer allegiant way to expose localhost via a public url
+        anyone with the url can access the app
+        easy to get started // simply install npm package
+        npm install localtunnel -g
+        start the app
+        lt --port 3000
+    ngrok: 
+        local machine can upgrade like a web server
+        secure tunnel to local machine  //passward protect access
+        sign up
+        install ngrok
+        install auth tocken 
+        start the app
+        ./ngrok http 80 //specify the port
+    now: 
+        different approach, easy way to depoly app up to the cloud
+        any directoy contain package.json can be uploaded to the cloud using one command
+        each time you deploy the "now" you assign new unique url
+        usful service for node.js applications in a low fiction way to host it in the cloud
+        you dont need to keep your machine on to share your progress
+        npm i now -g
+        creat start script to open web server such as Express
+        then to deploy the app just type " now "
+    Surge:
+        Just a static html, css and javaScript files, and now support node
+        no firewall hole
+        the first you will be prompted to provide email and passward on the command line
+        otherwise it will list your existing log-on and confirm the path you want to serve
+        npm i -g Surge
+        surge
+
+Share work-in-progress via localtunnel
+    npm install localtunnel -g
+    after installed we are ready to share what ever running on the web server
+    so we start the web server
+    // in this case 
+    node buildScripts/srcServer.js
+    //in another command line we type
+    lt --port 3000
+    it will return a random url
+    //we can add subdomain
+    lt --port 3000 --subdomain abood
+    If we choose BrowserSync for webserver, we continue to work by using localtunnel.
+    Even if mobile device and Development machine are in different network they still can interact
+
+Automation:
+    Is to assure that development builds and related tooling are intergrated 
+    and utilized in consist manner.
+    Of course you dont necessarily need any custom tooling to perform automation, we could 
+    simplly use system command line, but as automation get more complex,
+    Shall script may mean you reinventing the wheel.
+    Automation opitions: Grunt, Gulp, npm Scripts.
+    Grunt:
+        was the first javascript task runner to become popular.
+        configured via a Grunt file which foucsing on configuration over code;
+        grunt file basically big shunck of json to configured grunt to work with plug-in.
+        grunt file orianted ...... write files to the desk after each step of automation proccess
+        so reads from desk's input to subsequence step.
+        Large ecosystem plug-in.
+    Gulp:
+        Improves on Grunt plug-in model in few key areas
+        It foucs on In-memory stream which Gulp calls pipes.
+        sure in gulp you dont have to write to the desk after each step or a task,
+        instead you simply pipe the output of previous step to the next step in memory.
+        Faster than Grunt becasue it avoid writting to the desk.
+        Configured via a gulp file which code base rather than configuration based.
+        you write an actual javascript code in the gulp tasks.
+        Large plug-in ecosystem.
+    npm Scripts:
+        -Declared in the script section of package.json file
+        -Leverage all the power of operating system command line.
+        -Directly use anything we can install in npm package,
+        this can be useful if we want to write cross platform friendly npm script
+        by using npm packages for tasks that differ on windows versus mac and linux (like deleting file).
+        -Call seperate Node scripts when single command line call get too complicated.
+        -Npm scripts also offer convention based hooks, for 
+        running other scripts before and after our scripts.
+        -By choosing npm scripts we can select tools from the world's largest package manager
+
+        Why npm scripts ?
+        -Simplicity of using npm packages directly rather than abstraction layer of a plug-in.
+        -No need for seperate plugins.
+        -Makes debuging easier (one potential failure to worry about).
+        -Better docs (one place to check all the docs).
+        -Easier to learn.
+        -bit.ly/npmvsgulp
+
+Automation with npm scripts:
+    npm scripts allow you to make command line calls, utilizing pm packages,
+    or even call seperate scripts using node.
+    give us all the power that we need to create a web proccess.
+    Call seperate files from the "scripts" section of package.json file.
+    "scripts":{
+        "start": "node buildScripts/srcServer.js"
+    }
+    Open command line in VS Code 
+    => npm start 
+
+    Receive a helpful message when starting up the development environment:
+    create file startMessage.js
+    we will run this before the server start up;
+    "prestart": "node buildScripts/startMessage.js"
+
+    Automate commands we've done manually previously:
+    "security-check": "nsp check" 
+    it's more descriptive,
+    we don't have to install nsp globally; and it will not be added to the path(node_modules).
+    same thing for Localtunnel:
+    "share": "lt --port 3000"
+    => npm run security-check
+
+    npm run all:
+    handy way to run multiple items at the same time in a cross platform way.
+    run security-check each time we start the app
+    "start": "npm-run-all --parallel security-check open:src",
+    "open:src": "node buildScripts/srcServer.js"
+    To silence the noise:
+    npm start -s 
+    "localtunnel": "lt --port 3000",
+    "share": "npm-run-all --parallel localtunnel open:src"
+
+Transpiling:
+    The two most popular Transpilers: Babel, TypeScript
+    but ELM an excelent example of a language that give you a luxurious development experience.
+    Babel: 
+        -allow you to enjoy all the new features of javaScript even those currently experimental
+        in a standered based way.
+        -traspile the latest version of javascript down to ES5 so we can use all the new features
+        and run them everywhere ES5 is supported.
+    TypeScript:
+        -Superset of javascript
+        -add additional functionality to javascript 
+        -type safty means we can enjoy rich Autocompletion support
+        -safer refactoring by leaning on explicit type signature.
+        -clearifying developer intent 
+
+Babel :
+    offers two methods of configuration .babelrc / package.json
+    .babelrc should be placed in the root
+        -not npm specific
+        -easier to read since its a seperate file 
+    package.json:
+        -one less file in the project 
+        -the configuration in a section called babel 
+    babel can transpil an experimental features (view links under "plugins" page of babel website)
+
+    If we are deploying javaScript to a known environment such as node or ELECTRON
+    Remember ELECTRON apps run on chrome behind the scene, and since node is a server side technology,
+    you make the call of what version of node to run on the server.
+    this give you the power to intelligently only transpile the new parts of javascript that your target 
+    environment dosen't understand.
+    So to avoid Transpiling features unecessarily we can select this plugin from babel
+    babel-present-es2015-node.
+
+    ES5:- Faster and no waiting for transpile 
+        -no Transpiler dependency
+    Transpiled: -Enjoy the latest features 
+                -All the project use the same coding style (easier to read and understand)
+                -Use the same linting rules everywhere.
+                -We nan eventually remove the need of transpiler.
+
+    Set up babel:
+    create new file in the root of the project called .babelrc
+    configure .babelrc
+    change the code in startMessage
+    use babel-node instead of calling node directly
+
+Bundling:
+    npm packages use the common js pattern, node can handle this fine, but
+    browsers don't understand it. So we need to bundle npm packages in a format that browser can consume.
+    But Bundlers are just for apps run on the browsers,
+    we may use Bundler to package any javaScript to a single file.
+    This save bandwidth and speed pages load.
+    Improve node performance.
+
+    5 different Format to choose from(only one option make sense)
+        -IIFE
+        -Asynchronous Module Definition (AMD)
+        -Universal Modul Definition (UMD)
+        -CommonJS
+        -ES6 Modules
+
+    ES6: 
+        -Standaredized, When the platform that we run on has full support for ES6,
+        we dont have to transpile our code.
+        -Makes the code statically analyzable, means the code can be read in predictable way.
+        -Autocompletion
+        -Alert of invalid imports(for function doesnt exist, etc..)
+        -Find out the mistakes more quickly
+        -Tree shaking (Dead code elimination)
+        Easy to read: Named imports, Default exports.
+
+    Popular Bundlers:
+    Browserify:
+        -Special becasue it was the orginal, popularize the idea of using npm packages on the web.
+        -basically takes all the code and any npm packages
+        and bundle it in a way that browser can use.
+        -Browserify bundles code uses CommonJS pattern.
+        -it designed as plugin based 
+
+    Webpack:
+        -Its Intersting because can handle much more than js
+        -Offers huge ecosystem of loaders, so we can easily teach Webpack to intelligently
+        hanlde css, images, fonts, and more.
+        -Built in hot-reloading web server.
+        -Bundle Splitting; this avoid the users downloading all the js, instead we can
+        generate separate bundles for different sections of the app so it will be downloaded on demand.
+        -webpack 2 offers tree shaking.
+
+    Rollup:
+        -Tree shaking, eliminat code that we are not using from the final bundle.
+        -Faset loading production code. 350ms with Rollup
+        -Quite new, few examples.
+
+Set up Webpack Bundler:
+    will bundle all our assets up into as single file that run into the target environment.
+    Webpack configured via webpack.config.js
+    Its placed at the root of the project.
+    Grab the file from: bit.ly/2dSZwea
+    after setting it up, we need to set up our development 
+    web server to run webpack and serve up a bundle javascript.
+    creat index.js in src directory 
+    reference the final bundle in our html file 
+    creat css file
+    use it by add single line in the app entry point index.js
+    behind the scene webpack purse css and then use javascript to injetct the style sheet on the page
+
+    Sourcemaps: 
+    How do we debug transpiled and bundled code?
+    Sourcemap: map the bundled, transpiled and minified code back to the orginal source.
+    It generated automatically as part of the build proccess
+    It only downloaded if we open developer tools !
+
+    Automatically generate a Sourcemap as a part of Bundling proccess:
+        when we setup webpack for development we told webpack to generate a Sourcemap
+        by specifying the devtool setting, devtool: 'inline-source-map'.
+        There is different setting to experiment run to find what best for us (webpack Docs).
+        The basic trade off is between Sourcemap quality and speed, high quality Sourcemap
+        takes a little more time to creat. 
+        -The fav approach of setting break point is to type ward 'debugger' in a line where we want
+        break-point to hit 
+    
+Linting: (Two core reasons)
+ 
+    Programmatically enforce Consistency:
+    provide rapied feedback so issues caught during development
+    instead of potentially sleeping by during code reviews.
+    -Enforcing the position of curly braces.
+    -warning about the use built-in features that team decided to avoid like confirm/alert.
+    -trailing commas
+    -declaring global variables.
+    -disallowing of use of eval, since its potentially dangarous.
+
+    Avoid mistakes:
+    -adding extra parentheses, when rapping a statement.
+    -overwritting functions.
+    -assignment in conditional.
+    -missing default case in switch. which lead hardly debug go through issues.
+    -leaving debuging related junk code like debugger/console.log .
+
+EsLint:
+    -Multiple configuration files, or we can add to our package.json
+    -After choosing configuration what Rules should we enable?
+    -Warnings or errors ?
+    warnings are good for minor stylistic issues and errors good for items that produce bugs.
+    -Which plugins ? react, angular, node.js etc..
+
+    To avoid starting from scratch with those decisions, use Preset.
+    EsLint comes with Presets that implement logical defaults can save a lot of time.
+    EsLint Standered Rules, or we can use exsiting set-up rules like Airbnb, XO, Standard JS.
+
+    Watching files with EsLint:
+    Few different ways to run it, simpliest way via command line;
+        EsLint currently doesnt include watch setting built in,
+        so if we want to run it each time we hit save, running it by itself wont work, Two ways:
+        -eslint loader: webpack will run EsLint each time we run our build
+            Relints all files upon save.
+        -eslint-watch: this npm package
+            Is simplly wrapper around eslint that adds file watching capability.
+            Not tied to webpack.
+            Better looking warnings and errors.
+            Display messages when linting back clean.
+            Easily lint all the files even if it not beem bundled like (tests, and webpack config).
+
+    Many editors offer EsLint integration built-in,
+    Why Lint via Automated build proccess?
+    -One single place to check (for all feedbacks of build quality).
+    -Helpful on teams when developers use different editors.
+    -EsLint should be part of build proccess, so the build is broken on
+    the continuous integration server when someone commit any code that throw a linting error.
+
+    EsLint Set Up:
+    Creat .eslintrc.json file in the root of the project
+    bit.ly/jsdeveslint
+    rules 0 is off, 1 is warning, and 2 errors.
+    run via npm script
+    ->package.json -> "scripts"
+    "lint": "esw webpack.config.* src buildScripts --color"
+    Disable if any linting built to the editor .
+    Command line -> npm run lint
+    Exceptions for the rules we've defind:
+    add to srcServer.js
+    /* eslint-disable no-console */
+    go to startMessage
+    add //eslint-disable-line no-console
+
+    Lint watching files: will display errors immidiatlly when we hit save
+    "lint:watch": "npm run lint -- --watch"
+    Run eslint everytime we start the app
+    "start": "npm-run-all --parallel open:src lint:watch"
+
+Testing:
+    Unit Testing, The style of testing that most commonly configured in javascript environment,
+    Its focusing on single function or module (in an automated fashion).
+    Offen assert a certin function returns inspected value when pass certin parameter.
+    Unit Test mark up external dependencies like api's, database calls and file system interaction,
+    so the result are fast and deterministic.
+    Two another styles of testing: Intergration Testing, and UI (Selenium tool).
+
+    Imortant decisions to take:
+
+    Testing Framework:
+    Mocha: the most popular.
+    Jasmin includes assertion library built in.
+    Tape : the leanest and simpliest.
+    QUnit: the oldest, for JQuiry.
+    AVA: new Framework with intersting features.
+    Jest: from facebook, popular for react.
+
+    What is Assertion?
+    Is a way to declare what you expect (ex: .equal()).
+    the most popular assertion library is Chai, Should.js, and Expect.
+    the differences between those libraries are minor syntax.
+
+    Helper library:
+    JSDOM is implementation of the browser's DOM so we can run in node.js .
+    We can run test rely on the DOM without opening an actuall browser, this keeps test configuration
+    formatted test simplier and often means the test run faster.
+    JSDOM useful when we want write test involve html interation in the browser using node.
+
+    Where to run tests ?
+    Three popular approaches to run javascript test:
+    -Run the test in the browser
+    Karma, Testem are popular test runner for testing an actual browser.
+    -Headless Browser
+    Is a browser that doesn't have a visible user interface
+    PhantomJS
+    -In-memory DOM
+    JSDOM simulate an actual browser by creating a DOM in memory that we can interact with.
+
+    Where we should put the test ?
+    -Centralize all the test in one folder called test,
+    so all tests are completely separate from the source code.
+        -avoid adding noise to the source code in directory
+        -don't deploy test files to the producation
+        -Inertia, is popular to creat seperate test folder in the project
+    -Along side
+        -importing easier
+        ex: import file from './file'
+        -clear visibility to the test and easy to open.
+        -easy to move files without the path changed.
+
+    When should test run ?
+    Unit test should run everytime we hit save,
+    Unit test runs extremely fast, becasue it shouldn't hit external resources.
+    -rapied feedback
+    -facilities testing development
+    -make it automatic will reduce friction
+    -increase the visibility that the test do exist.
+
+Testing Set Up:
+    ->buildScripts -> creat testSetup.js
+    ->package.json -> "test"
+    -> src -> creat index.test.js
+    put JSDOM to use:
+    ->index.test.js
+    run test everytime we hit save:
+    ->package.json -> "test:watch"
+
+Continuous Intergration:
+    When the team commit code and its handy to conform immidiatlly that commit is work as expected,
+    that what CI server is for. ex: Know when someone made bad commit.
+    CI server catch a number of potential mistakes:
+    -forget to commit a file
+    -forget to update package.json
+    -commit doesnt run cross-platforms
+    -machine node version is different from the one in server
+    -bad merge
+    -didn't run test.
+
+    What does a CI server do ?
+    -builds the applications automatically the moment we commit 
+    -run the test when commit 
+    -can run tasks like code coverage.
+    -automated deployment.
+
+    CI options:
+        Travis, Appveyor, Jenkins, CircleCI, Semaphore, SnapCI
+
+Setup Travis CI server:
+    It offers Intergration with github which make it quick and easy to add the project.
+    -> travis-ci.org -> login with github account -> activate the project 
+    get back to the editor -> add configuration file 
+    .travis.yml 
+    go to index.html and make a change to see how the build fails on the ci server.
+    
