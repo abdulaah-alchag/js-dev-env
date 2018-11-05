@@ -486,6 +486,7 @@ Continuous Intergration:
         Travis, Appveyor, Jenkins, CircleCI, Semaphore, SnapCI
 
 Setup Travis CI server:
+    Run in Linux.
     It offers Intergration with github which make it quick and easy to add the project.
     -> travis-ci.org -> login with github account -> activate the project 
     get back to the editor -> add configuration file 
@@ -495,3 +496,17 @@ Setup Travis CI server:
     git add .
     git commit -m "module 9 work in progress"
     git push
+    go to travis and see how the test failed
+    come back to make change to the code
+    git add.  git commit  git push 
+    Now we know that application run not only in this machine, 
+    but also in a seperate continuous Intergration server.
+
+Setup Appveyor:
+    Run in windows
+    https://www.appveyor.com/
+    login with github account.
+    -> new project -> github -> choose project
+    back to the editor -> add configuration file
+    appveyor.yml
+    git add .  ,git commit -m,  git push
