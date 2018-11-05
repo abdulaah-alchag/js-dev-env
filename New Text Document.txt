@@ -491,4 +491,7 @@ Setup Travis CI server:
     get back to the editor -> add configuration file 
     .travis.yml 
     go to index.html and make a change to see how the build fails on the ci server.
-    
+    git status
+    git add .
+    git commit -m "module 9 work in progress"
+    git push
