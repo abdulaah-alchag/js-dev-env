@@ -1,25 +1,24 @@
 import express from 'express';
 import path from 'path';
 import open from 'open'; //used to open our site in the browser
-import webpack from 'webpack';
-import config from '../webpack.config.dev.js';
+import compression from 'compression';
+//enabling gzip compression, so we can see final gzip file sizes we are serving the app locally 
+//this give us a clear understand about the file sizes sent over the wire to the user
+// remove webpack calls becasue we're no longer interacting with webpack with distserver
+// we will be serving up static files 
 
 /* eslint-disable no-console */
 
 const port = 3000;
 const app = express();
-//call the webpack and pass the config
-const compiler = webpack(config);
 
-//is a way for us to tell express other things we like to use 
-app.use(require('webpack-dev-middleware')(compiler,{
-    noInfo: true,
-    publicPath: config.output.publicPath 
-    //we just referencing variable that we define when we setup our webpack config
-}));
+app.use(compression());
+
+// add support to express for serving static files
+app.use(express.static('dist'));
 
 app.get('/', function(req, res){
-    res.sendFile(path.join(__dirname, '../src/index.html'));
+    res.sendFile(path.join(__dirname, '../dist/index.html'));
 });
 
 app.get('/users', function(req, res){

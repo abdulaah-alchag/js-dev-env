@@ -13,7 +13,7 @@ describe('Our first test', () =>{
 });
 
 describe('index.html', () =>{
-    it('should say hello', (done) =>{
+    it('should have h1 start says Users', (done) =>{
         const index = fs.readFileSync('./src/index.html', "utf-8");
         //get a reference to index.html and hold it in memory
         jsdom.env(index, function(err,window){
@@ -22,7 +22,7 @@ describe('index.html', () =>{
         //call back function runs after jsdom, window is the window in the browser
         const h1 = window.document.getElementsByTagName('h1')[0];
         //will bring back an array, [0] is the first one 
-        expect(h1.innerHTML).to.equal('Hello World!');
+        expect(h1.innerHTML).to.equal('Users');
         done();
         //when we call jsdom there's an asynchronous call occur to set it up we put done
         window.close();

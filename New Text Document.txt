@@ -31,7 +31,7 @@ Package security :
     Because packages can be published by anyone.
     retire.js/Node security platform are two ways
     to check the project dependencies for knwon vulnerability.
-    Node security platform: offers a simple command line interface you can automat checking for 
+    Node security platform: offers a simple command line interface you can automate checking for 
     security vulnerability automatically  (nsp check)
     npm install --global nsp
     //cd to the app
@@ -160,14 +160,14 @@ Automation:
         -Directly use anything we can install in npm package,
         this can be useful if we want to write cross platform friendly npm script
         by using npm packages for tasks that differ on windows versus mac and linux (like deleting file).
-        -Call seperate Node scripts when single command line call get too complicated.
+        -Call separate Node scripts when single command line call get too complicated.
         -Npm scripts also offer convention based hooks, for 
         running other scripts before and after our scripts.
         -By choosing npm scripts we can select tools from the world's largest package manager
 
         Why npm scripts ?
         -Simplicity of using npm packages directly rather than abstraction layer of a plug-in.
-        -No need for seperate plugins.
+        -No need for separate plugins.
         -Makes debuging easier (one potential failure to worry about).
         -Better docs (one place to check all the docs).
         -Easier to learn.
@@ -175,9 +175,9 @@ Automation:
 
 Automation with npm scripts:
     npm scripts allow you to make command line calls, utilizing pm packages,
-    or even call seperate scripts using node.
+    or even call separate scripts using node.
     give us all the power that we need to create a web proccess.
-    Call seperate files from the "scripts" section of package.json file.
+    Call separate files from the "scripts" section of package.json file.
     "scripts":{
         "start": "node buildScripts/srcServer.js"
     }
@@ -226,7 +226,7 @@ Babel :
     offers two methods of configuration .babelrc / package.json
     .babelrc should be placed in the root
         -not npm specific
-        -easier to read since its a seperate file 
+        -easier to read since its a separate file 
     package.json:
         -one less file in the project 
         -the configuration in a section called babel 
@@ -441,7 +441,7 @@ Testing:
     so all tests are completely separate from the source code.
         -avoid adding noise to the source code in directory
         -don't deploy test files to the producation
-        -Inertia, is popular to creat seperate test folder in the project
+        -Inertia, is popular to creat separate test folder in the project
     -Along side
         -importing easier
         ex: import file from './file'
@@ -500,7 +500,7 @@ Setup Travis CI server:
     come back to make change to the code
     git add.  git commit  git push 
     Now we know that application run not only in this machine, 
-    but also in a seperate continuous Intergration server.
+    but also in a separate continuous Intergration server.
 
 Setup Appveyor:
     Run in windows
@@ -510,3 +510,331 @@ Setup Appveyor:
     back to the editor -> add configuration file
     appveyor.yml
     git add .  ,git commit -m,  git push
+    go to appveyor and check latest build 
+    If the build has failed we would recieve an email notifying us.
+
+
+HTTP Calls:
+    Many popular ways to handle http calls in javaScript,
+    The library options depend where we want to run the app.
+    Node:
+        -Provides a built in package called http,
+        its a low level library provides a basic functionality for making http request.
+        --request: is a popular higher level library makes it simplier to make these calls in node.
+
+    If we're writting JS for the Browser:
+        -XMLHttpRequest: this is the native and orginal way since 1999.
+        -JQuiry: $.ajax object, its logical way to handle http calls if we're
+        using JQuiry in the project because its avoiding pulling in extra dependency.
+        -Framework-based: like angular, it includes own http service.
+        --Fetch: offers a stream line api that handle http calls.
+
+    Browser & node: 
+        -isomorphic-fetch: is npm package that provides a fetch like api 
+        thats run in a server via node and the browser.
+        -xhr: npm package, provides subset of request library in node, but the subset features
+        support run on node and the browser 
+        -SuperAgent and Axios: are popular libraries thats run on node and the browser,
+        -Axios prefered becasue it offers clean promise based api 
+
+    Centralize API Calls(handled a single spot)
+        -one place to configure all calls; this way we can declare important configuration like 
+        base urls, prefered response type, pass credentials.
+        - preloader icon (spinner): when asynchronous calls in progress its important that user aware.
+        we can keep track of how many asynchronous call in progress, this assure preloader continue to 
+        display until all asynchronous calls are complete. 
+        -single place to handle errors, this assure that anytime error occurs the application can 
+        hanlde it in a standaredized way.
+        -single seam for mocking api, it means we can point to a mock api instead of 
+        real one by changing a single line of code.
+
+Setup Fetch:
+    Centralize Http Calls
+    Use express to make a single api call
+    -> srcServer.js -> creat simple endpoint return user data
+    json return from express as we expected
+    update the app call the api using fetch and display the result on the page
+    -> src -> creat new folder api -> creat file userApi.js
+    this is where the api call to get users.
+    note: on the server the repository pattern is offten used to abstract the way data access(database)
+    using api, here we're abstracting away web api for more applications.
+    we've set the api and now we call it:
+    -> index.html
+    ->index.js
+    dont forget about polyfill.io
+
+Mock HTTP:
+    -Unit Test will run quickly and reliably.
+    -Receive consistently instant response.
+    -Keep working when services are down.
+    -Rapied prototyping.
+    -Avoid inter-team bottlenecks.
+    -Work offline.
+
+    How to mock http ?
+    -Nock: if we are writting unit test, Nock will hijack any http request 
+    to the url and return what we specified, no longer actual http calls.
+    -Static JSON: pointing to a static json in coded data, if we've standaredized api calls.
+    -Creat a webserver that mocks up a real api with libraries like:
+        -api-mock
+        --JSON server, you creat fake database using static json.
+        -JSON Schema Faker, dynamic data
+        -BrowserSync.
+        -Express.
+
+    Our plan for Mocking HTTP:
+        -JSON Schema Facker : is descripe json format 
+        -Genrate Random Data:
+        using few open source libraries
+            -facker.js
+            -chance.js
+            -randexp.js
+        this will ultimately produce big chunck of json contain different data everytime.
+        -JSON Server creat a realistic api using a static json file behind the scene.
+        This way the api feels like a real api with making over a network an http call.
+
+    -> buildScripts -> creat mockDataSchema.js
+    -> paste the schema  bit.ly/ps-mock-data-schema
+    -> buildScripts -> creat generateMockData.js
+    Write npm script make this easy to call
+    -> package.json -> "generate-mock-data"
+    npm run generate-mock-data
+    now we have generated data writen in db.json
+    Start up json server: it will parse our json file
+    creat new npm script:
+    -> package.json -> "start-mockapi" 
+    we can see the list of resources that json server is exposing 
+    in this case it found our top level object "users", but if we added more top level 
+    object, it will creat endpoint for each one 
+    Resources-> copy the url -> paste it the browser 
+    we can see array of users is getting returned as expected.
+    To generate new mocked data everytime we start the app:
+    -> package.json -> "prestart-mockapi"
+
+    we need to update the application to hit the new mock api instead of express api
+    by assuming express server is a real production api 
+    and the mock api we've setup is what we want to use during development.
+    we need the application to point to the proper base url 
+    this file contain logic that points the api weither to mock api or real api by express.
+    api folder -> creat baseUrl.js  
+    -> userApi -> import
+
+    Delete users by the necessarily api call:
+    -> userApi -> deleteUser()
+
+Demo app:
+    -Suggested directory structure and file naming.
+    -Patterns of how developer should work with the selected libraries and frameworks.
+    -Example of passing test, reference for testing scenario, file placement.
+    -Realistic example of Mock api working in the domain.
+    -Provides working automated deployment.
+    -Singleplace to codifie decisions: 
+        -the demo app should reflect coding standards, it's place 
+        to update to as we learn new technices and patterns we wanna share with the team.
+    --Offers an interactive example of the starter kit working in a realistic scenario.
+
+Project Structure Tips:
+    -javaScript belongs to .js file
+        -If we slap JS in a script tag:
+        we lose the ability to write tests, lint, reuse, transpile and import dependencies ...
+
+    -Consider organizing by feature instead by file type.
+        By file type is popular approach when working with MVC frameworks, it will 
+        end up bounce around file system to work with related file.
+        By organizing by feature on larger projects because we can go directly to the feature 
+        that we're working with and all the related files are setting inside.
+
+    -Extract much logic as possible into Plain Old JavaScript (POJO's).
+        Plain logic doesn't tie to any framework, this makes the logic easy to test, reuse
+        and helps to minimize our ties to the framework.
+        logic such as date formating, and core calculation.
+        ex: demo app at https://github.com/coryhouse/react-slingshot/tree/master/src/utils
+
+
+Production Build:
+
+    Minification:
+    Is about speeding page load and saving bandwidth
+        -shorten variable and function names
+        -remove commenets 
+        -remove whitespace and new lines 
+        -new bundlers like Webpack2, eliminat dead code / Tree-shaking
+        -debug via Sourcemap.
+
+    Setup Minification:
+        enhance webpack config with additional features 
+        -> make a copy of webpack.config.prod.js
+        script run webpack producation config
+        -> buildScripts -> new file build.js
+
+    Configure Local dist server:
+    -Not required and
+    - This is not for actual producation use. this just useful for hosting the minified 
+    production build for local debugging purposes.
+    run the final producation version of the app in local machine 
+    to make sure everything looks good. This can be helpful when we want to debug an issue 
+    with the production build 
+    -> buildScripts -> distServer.js 
+    srcServer server src folder, distServer server dist folder
+    
+
+    Toggle Mock api:
+    Decide what api to use when we're checking producation build locally ?
+    prefered to hit the real api when testing the producation locally
+    -> baseUrl 
+    with this change we can easily swap between the real and the mock api during development
+    by just adding useMockApi to the query string 
+    -> npm start -s
+    -> ?useMockApi=true
+
+    Production Build npm Script:
+    In order for automate producation build proccess we add some npm scripts:
+    -> package.json
+    -> "clean-dist", "prebuild", "build", "postbuild" 
+    -> npm run build -s
+    We can see our minified javaScript is being written in bundle.js
+    the Sourcemap make it readable in the browser.
+    No css files is being embedded into bundle.js and injetcted at run time.
+
+    Dynamic HTML:
+    When we bunlde the code we obviously need to reference it in html file.
+    What if we want to run different html file in producation than development? why?
+        -reference bunldles automatically.
+        -generate dynamic bundle names.
+        -injetct some scripts resources only for producation.
+        -minifying html to save bandwidth.
+    Three options to handle html:
+        -hard code a reference to bundle.js
+        <script src="bundle.js"></script>
+        -via node
+        dynamically add some other code to the page production, dynamically generate html file.
+        - html-webpack-plugin
+        simplify the creation of application html file.
+        generate different name each time the assets change
+
+    HTML-Webpack-Pluging
+        -> webpack.config.prod.js 
+        -> index.html -> remove script tag
+        update development webpack config as well
+        -> webpack.config.dev.js 
+        We are ready to run the app in production mode
+        -> npm run build -s
+        we can enhance the configuration of html webpack pluging to save bandwidth,
+        since we're dynamically generating html:
+        -> webpack.config.prod.js
+        -> npm run build -s 
+        -> web -> ctr+u
+
+    Bundle Splitting:
+        -Speed the initial page load in larg apps and apps with many pages,
+        by only requiring user to download the javascript necessary to run that page.
+        -Avoid user from re-downloading all the libraries if we push new update,
+        in this way the user will only download th updated code, 
+        Save bandwidth and higher performance experience.
+
+        -Another approach to consider in smaller apps is to split 3d party library
+        into separate bundle in application code, the reason is if the app code changes
+        the user wont have to download all the 3 party libraries that we are using again
+        the browser will continue to use the cache version.
+        -If we want separate bundles for different pages of the app, we can declare those
+        using the same pattern by add one entire point in webpack config per page. 
+        
+        -> webpack.config.prod
+        -> src -> new vendor.js 
+
+    Cache Busting:
+        -Save http requests, tell user's browser not to request assets up to year.
+        so after the user download the javaScript file they wont make http request 
+        for that file, speed page load and save bandwidth.
+        -Force request for latest version, recieve the new bundle by generating 
+        a new file name for that bundle.
+        - Plan:
+            - Hash bundle filename, this way the file name will only changes if 
+            the bundle actually changes, this assure that if we rebuild the app
+            with no changes to javascript bundle it will continue to have same filename.
+            - since the file name generated dynamically, we need to make sure that file name 
+            reference in corresponding html file is set accordingly, so we'll 
+            generate html dynamically and inject the filename in the building proccess.
+               
+        Setup Cache Busting:
+        -> webpack.config.prod.js -> webpack-md5-hash
+        -> npm run build -s 
+        we can see the file names have hashes 
+        and the references dynamically written in index.html 
+
+        Extrat and Minify CSS:
+        generate traditional separate css file for producation so we can utilize the 
+        same cache Busting technique 
+        -> webpack.config.prod.js 
+        -> npm run build -s
+
+    Production Error Logging:
+        when the app through a javaScript error in producation
+        Avaiable services: TrackJs, Sentry, New Relic, Raygun
+        -Provides error metadata
+            -what browser the error occurs in.
+            -catch stack trace.
+            -catch previous action that user was performing.
+            -offers custom api for enhanced tracking.
+        -Notification & Intergration
+            -recieve email when error occur
+            -intergrate with other platforms like slacks 
+        -Filter out the noise by adding errors together, filtering the list 
+        and setting a rules when should be notified.
+        -Pricing (the cost).
+
+        Setup TrackJs:
+        -> trackjs.com -> signup 1 month free trial 
+        -> index.html 
+        ->npm run build -s 
+        -> trackjs.com -> Track an Error -> paste in console.log
+        -> trackjs.com -> My Errors -> Recent 
+
+        HTML templates via EmbeddedJs:
+        Since logging errors in development environment isnt useful and add noise to logging records,
+        so instead we use templating engine support built in to html webpack plugin.
+        -> webpack.config.prod.js
+        -> index.html
+        now html file will be ejs file 
+
+
+Production Deploy:
+
+    Separate the UI from the API (frontend and api) to a completely different project:
+        -The static frontend is easy to deploy, we just need to uplaod the static file 
+        we just wrote to the dist folder to a public webserver 
+        -Separates concerns: 
+        provide the ability to have separate teams building frontend
+        and backend parallel. The UI team can code against the mock api we set up,
+        and when the real api is ready they can point there instead.
+        scale the back-end separately, this is special useful when we create an api 
+        that gonna be consume by multiple applications since the traffic for the api 
+        differ from the UI traffic.
+        -Static frontend is cheap to host: we can select any host in the world, beacuse 
+        all what we need is a host to serve a static files.
+        -Frontend can be served via content delivery network (CDN):
+        handle caching and scalability, cdn specially useful for high traffic sites
+        and applications that used around the world since cdn intelligently serve 
+        assets from the closest physical server to speed downloaded.
+        -Hosting separately means we free to use what ever technology the we like for the backend,
+        so if the team prefer to build api in different language like c#, etc ...
+        keeping the UI and api separate give us that option.
+
+    Automated Deployment:
+        Where to host the app (Cloud Hosting):
+        -amazon web services
+        -Microsoft Azure
+        -HEROKU
+        -Firebase
+        -Google Cloud Platform
+        Serving static files:
+        -Netlify
+        -Github pages
+        -Surge.
+
+    Setup Automated Api Deploy to HEROKU:
+        By creating a completely separate project to show how we can host 
+        and mange the UI and api separately.
+        -> heroku.com -> Node.js
+        
+

@@ -1,13 +1,15 @@
 //webpack configured via a single object that we define here 
 //webpack configured by exporting this object
 import path from 'path';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+
 
 export default {
   debug: true, //this enabling debug information
   devtool: 'inline-source-map',
   noInfo: false, //webpack will not display the list of the files, no noise in the command line
   entry: [ //array of entry points, good way to inject middleware for hot reloading 
-    path.resolve(__dirname, 'src/index') //here is simple
+    path.resolve(__dirname, 'src/index') //here is simple index.js
     // global __dirname which is part of node to sure we get full path using path package
   ],
   target: 'web', //we could set it to 'node' if we are using wepack to build app running on node
@@ -19,7 +21,13 @@ export default {
     publicPath: '/',
     filename: 'bundle.js'
   },
-  plugins: [],
+  plugins: [
+    // Create HTML file that includes reference to bundle JS.
+    new HtmlWebpackPlugin({
+      template: 'src/index.html',
+      inject: true
+    })
+  ],
   module: {
     loaders: [ //handle different file types
       {test: /\.js$/, exclude: /node_modules/, loaders: ['babel']},
