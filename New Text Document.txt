@@ -58,7 +58,7 @@ Development Webserver:
         Production 
         Advantage of running the same webserver in all places
         Competitors: Koa, hapi
-    Intersting options specific to the Bundlers we choose
+Intersting options specific to the Bundlers we choose
     Budo: 
         Intergrate with Browserify
         Includes hot reloading (see the changes reflect in the browser when hit save)
@@ -836,5 +836,53 @@ Production Deploy:
         By creating a completely separate project to show how we can host 
         and mange the UI and api separately.
         -> heroku.com -> Node.js
-        
+        -> downloading heroku cl -> cmd -> heroku login
+        -> clone the example app 
+        -> open in editor
+        ->package.json
+        ->npm install 
+        cors to enable cross orgin calls since we are calling our heroku based api from different domain
+        change the repository url 
+        ->index.js
+        we keep this project as simple as possible to see how is it working with heroku 
+        -> app.json descripe our app to heroku 
+        -> procfile declares the command that heroku should run
+        -> heroku login
+        -> heroku create 
+        heroku generate a random message for the app
+        or we can pass a parameter to specify our own name
+        now we need to configure a git remote that point to our heroku application  
+        -> heroku git:remote -a my-js-dev-env-demo-api   (the name of the app)
+        git push heroku master 
+        then we can copy the url and open it in the browser .
+        And now any time we make changes to our api we'll just commit the changes 
+        and then run git push heroku master.
+        after we have our api in heroku we go to UI project so it will hit heroku api
+        -> baseUrl 
+        -> distServer -> remove a section becasue we are hitting heroku instead of local 
 
+    Automated UI Deployment:
+        -npm start : Development, once we're done coding then,
+        -npm run build : To build the application in production mode then,
+        -npm run deploy: This will automatically push the final built application up 
+        to a producation host
+        -> npm i surge 
+        -> package.json -> "deploy"
+        -> npm run build 
+        -> npm run deploy
+
+Starter Kit Update Approaches:
+    Keep existing projects updated over time as we inhance our development environment
+    down the road, and how we get this inhancment to the products we lunch earlier 
+    -Yeoman:
+        -create Yeoman generatore: npm i -g yo
+        - commit all the code 
+        - rerun the generatore on the existing project 
+        - div the file and resolve any conflict 
+    -Github:
+        -host on github
+        -fork starter kit for the new project
+        -pull changes from master 
+    -npm:  
+        -we are abstracting away the configuration n build Scripts behind npm package
+        -then update the npm package to recieve the latest changes 
